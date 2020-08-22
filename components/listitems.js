@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ({ name, onPress}) => {
+export default ({ name, onPress, meal}) => {
     return(
         <TouchableOpacity style={styles.container} onPress={onPress}>
-            <Text style={styles.Text}> {name} </Text>
+            <Text style={styles.Text}> {meal} -  {name}</Text>
         </TouchableOpacity>
     )
 }

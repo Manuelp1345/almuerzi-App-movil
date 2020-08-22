@@ -1,9 +1,15 @@
 import { createAppContainer, createSwitchNavigator } from "react-navigation"
 import { createStackNavigator } from "react-navigation-stack"
 import MealsScreen from "./screens/Meals"
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import OrdersScreen from "./screens/Orders"
 import LoginScreen from "./screens/Login"
 import RegisterScreen from "./screens/Register"
+import AuthLoading from "./screens/AuthLoading"
 import Modal from './screens/Modal' 
+import { createDrawerNavigator } from "react-navigation-drawer"
+import { AsyncStorage,View } from "react-native"
+import React from 'react' 
 
 const OnboardingNavigator = createStackNavigator({
   Login:LoginScreen,
@@ -31,10 +37,32 @@ RegisterScreen.navigationOptions ={
   title:"Registrarse",
 }
 
-const AppNavigator = createStackNavigator({
+const exit = ({ navigation })=>{
+  AsyncStorage.removeItem("token")
+  navigation.navigate("Login")
+  return(
+    <View>
+    </View>
+  )
+}
+
+exit.navigationOptions=({
+  title: "Cerrar Sesion",
+  drawerIcon:({tintColor})=>{
+      return <MaterialCommunityIcons name="exit-to-app" size={25} color={tintColor} />
+  }
+})
+
+const AppNavigator = createDrawerNavigator({
   Meals:{
     screen: MealsScreen
   },
+  Ordenes:{
+    screen: OrdersScreen
+  },
+  exit:{
+    screen: exit
+  }
 },{
   initialRouteName: "Meals",
   defaultNavigationOptions:{
@@ -57,10 +85,11 @@ const RootStack = createStackNavigator({
 })
 
 const baseStack = createSwitchNavigator({
+  AuthLoading,
   Onboarding: OnboardingNavigator,
   Root: RootStack
 },{
-  initialRouteName:"Onboarding",
+  initialRouteName:"AuthLoading",
   headerMode:"none"
 })
 

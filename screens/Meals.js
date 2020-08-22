@@ -1,5 +1,6 @@
 import React from 'react'  
-import { View,StyleSheet,Text, FlatList } from 'react-native'    
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { View,StyleSheet,Text, FlatList, TouchableOpacity } from 'react-native'    
 import ListItem from '../components/listitems' 
 import useFetch  from '../hooks/useFetch' 
 
@@ -16,6 +17,13 @@ const styles = StyleSheet.create ({
     Text:{
         flex:2,
         fontSize:30,
+    },
+    barra:{
+        backgroundColor:"cyan",
+        height:60,
+        alignItems:"flex-start",
+        justifyContent:"flex-end",
+        alignSelf:"stretch",
     }
 })
 
@@ -24,6 +32,12 @@ const Meals = ({ navigation })=>{
     const {loading, data} = useFetch("https://serverless-v2.manuelp1345.vercel.app/api/meals")
 
     return(
+        <>
+        <View style={styles.barra} > 
+            <TouchableOpacity onPress={()=> navigation.toggleDrawer() }> 
+                <MaterialCommunityIcons name="menu" size={40} />
+            </TouchableOpacity> 
+        </View>
         <View style={styles.container} >
             {loading
             ?
@@ -42,11 +56,15 @@ const Meals = ({ navigation })=>{
                 />
             }
         </View>
+        </>
     )
 }
 
 Meals.navigationOptions=({
-    title: "Comidas Disponibles"
+    title: "Menu",
+    drawerIcon:({tintColor})=>{
+        return <MaterialCommunityIcons name="food" size={25} color={tintColor} />
+    }
 })
 
 export default Meals 

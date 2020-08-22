@@ -1,5 +1,6 @@
 import React from 'react'    
-import { Text, TextInput,View,StyleSheet, TouchableOpacity } from 'react-native' 
+import { Text, TextInput,View,StyleSheet, TouchableOpacity, Alert, AsyncStorage } from 'react-native' 
+import useForm from '../hooks/useForm'
 const styles= StyleSheet.create({
     container:{
         flex:1,
@@ -51,6 +52,34 @@ const styles= StyleSheet.create({
 })
 
 export default ({navigation})=>{
+    const initialState = {
+        email:"",
+        password: "",
+    }
+    const onSubmit = values =>{
+        fetch("https://serverless-v2.manuelp1345.vercel.app/api/auth/login",{
+            method: "POST",
+            headers:{
+                "Content-Type": "Application/json"
+            },
+            body:JSON.stringify(values),
+        })
+        .then(x=>x.text())
+        .then(x=>{
+            try{
+                return JSON.parse(x)
+            }catch{
+                throw x
+            }
+        })
+        .then(x => {
+            AsyncStorage.setItem("token", x.token)
+            navigation.navigate("Meals")
+        })
+        .catch(e => Alert.alert("Error",e))
+
+    }
+    const { subscribe, inputs, handleSubmit } = useForm(initialState, onSubmit)
     return(
         <View style={styles.container} >
             <Text style={styles.Titulo} > Almuerzi App </Text>
@@ -58,19 +87,26 @@ export default ({navigation})=>{
             <Text>Correo</Text>
             <TextInput style={styles.Input}
                 placeholder="Correo Electronico"
+                value={ inputs.email.trim() }
+                onChangeText={subscribe("email")}
+                autoCapitalize={"none"}
+
                 />
             <Text>Contraseña</Text>
             <TextInput style={styles.Input}
                 placeholder="Contraseña"
+                value={ inputs.password}
+                onChangeText={subscribe("password")}
+                secureTextEntry={true}
+                autoCapitalize={"none"}
             />
-            <TouchableOpacity style={styles.btns, styles.login} backgroundColor="cyan" onPress={()=> {}} >
+            <TouchableOpacity onPress={handleSubmit} style={styles.btns, styles.login} backgroundColor="cyan" >
             <Text>Ingresar</Text>
             </TouchableOpacity>
             <Text> </Text>
             <TouchableOpacity style={styles.btns} onPress={()=> {navigation.navigate("Register")}} >
                 <Text>Registrarse</Text>
             </TouchableOpacity>
-
         </View>
     )
 }
