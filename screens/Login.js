@@ -1,5 +1,5 @@
-import React from 'react'    
-import { Text, TextInput,View,StyleSheet, TouchableOpacity, Alert, AsyncStorage } from 'react-native' 
+import React, { useState } from 'react'    
+import { Text, TextInput,View,StyleSheet, TouchableOpacity, Alert, AsyncStorage, ActivityIndicator } from 'react-native' 
 import useForm from '../hooks/useForm'
 const styles= StyleSheet.create({
     container:{
@@ -57,6 +57,7 @@ export default ({navigation})=>{
         password: "",
     }
     const onSubmit = values =>{
+        setLoading(true)
         fetch("https://serverless-v2.manuelp1345.vercel.app/api/auth/login",{
             method: "POST",
             headers:{
@@ -79,11 +80,14 @@ export default ({navigation})=>{
         .catch(e => Alert.alert("Error",e))
 
     }
+    const [loading,setLoading] = useState(false)
+
     const { subscribe, inputs, handleSubmit } = useForm(initialState, onSubmit)
     return(
         <View style={styles.container} >
             <Text style={styles.Titulo} > Almuerzi App </Text>
             <Text style={styles.TitSubTituloulo} > Iniciar Sesion </Text>
+            <ActivityIndicator size="large" color="cyan" animating={loading} />
             <Text>Correo</Text>
             <TextInput style={styles.Input}
                 placeholder="Correo Electronico"

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'  
-import { View,Text,Button, StyleSheet, AsyncStorage } from 'react-native'    
+import { View,Text,Button, StyleSheet, AsyncStorage, ActivityIndicator } from 'react-native'    
 import useFetch from '../hooks/useFetch'
 
 export default ({ navigation })=>{
@@ -14,7 +14,10 @@ export default ({ navigation })=>{
         <View style={styles.container}>
         { loading
         ?
-        <Text>Carnado...</Text> 
+        <>
+        <Text style={styles.Text} >Cargando...</Text>
+        <ActivityIndicator size="large" color="cyan"/>
+        </>
         :
         <>
         <Text> {data._id} </Text>
@@ -75,9 +78,13 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent:"center",
         alignItems:"center",
+        textAlign:"center"
     },
     btns:{
         marginTop: 20,
         flexDirection:"row"
-    }
+    },
+    Text:{
+        fontSize:30,
+    },
 })

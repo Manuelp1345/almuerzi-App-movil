@@ -1,6 +1,6 @@
 import React from 'react'  
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { View,StyleSheet,Text, FlatList, TouchableOpacity } from 'react-native'    
+import { View,StyleSheet,Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'    
 import ListItem from '../components/listitems' 
 import useFetch  from '../hooks/useFetch' 
 
@@ -8,15 +8,17 @@ const styles = StyleSheet.create ({
     container:{
         flex: 1,
         backgroundColor: "#fff",
-        alignItems:"flex-start",
-        justifyContent: "flex-start"
+        alignItems:"center",
+        justifyContent: "center"
     },
     list:{
         alignSelf:"stretch"
     },
     Text:{
-        flex:2,
         fontSize:30,
+        paddingTop: 25,
+        justifyContent:"center",
+        alignItems:"center"
     },
     barra:{
         backgroundColor:"cyan",
@@ -24,7 +26,7 @@ const styles = StyleSheet.create ({
         alignItems:"flex-start",
         justifyContent:"flex-end",
         alignSelf:"stretch",
-    }
+    },
 })
 
 const Meals = ({ navigation })=>{
@@ -41,7 +43,10 @@ const Meals = ({ navigation })=>{
         <View style={styles.container} >
             {loading
             ?
-                <Text style={styles.Text} > Cargando... </Text>
+            <View style={styles.container}>
+                <Text style={styles.Text}>Cargando...</Text>
+                <ActivityIndicator size="large" color="cyan"/>
+            </View>
             :
                 <FlatList
                 style={styles.list}

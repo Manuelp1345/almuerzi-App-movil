@@ -1,5 +1,5 @@
-import React,{useState, useEffect} from 'react'  
-import { View,StyleSheet,Text, FlatList, TouchableOpacity,ScrollView } from 'react-native'    
+import React from 'react'  
+import { View,StyleSheet,Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'    
 import ListItem from '../components/listitems' 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useFetch  from '../hooks/useFetch' 
@@ -8,38 +8,40 @@ const styles = StyleSheet.create ({
     container:{
         flex: 1,
         backgroundColor: "#fff",
-        alignItems:"flex-start",
-        justifyContent: "flex-start"
+        alignItems:"center",
+        justifyContent:"center"
     },
     list:{
         alignSelf:"stretch"
     },
     Text:{
-        flex:2,
         fontSize:30,
+        paddingTop: 25,
+        justifyContent:"center",
+        alignItems:"center"
     },
     barra:{
-        flexDirection:"row",
         backgroundColor:"cyan",
         height:60,
-        alignItems:"center",
-        justifyContent:"space-between",
+        alignItems:"flex-start",
+        justifyContent:"flex-end",
         alignSelf:"stretch",
-        paddingTop:20,
-        paddingBottom:-5
-    }
+    },
 })
 
 const Load =()=>{
-    const {loading,data} = useFetch("https://serverless-v2.manuelp1345.vercel.app/api/orders")
+    const {loading,data} = useFetch("https://serverless-v2.manuelp1345.vercel.app/api/orders","screen")
 
     return(
         <View style={styles.container} >
         {loading
         ?
-            <Text style={styles.Text} > Cargando... </Text>
+        <View style={styles.container}>
+            <Text style={styles.Text}>Cargando...</Text>
+            <ActivityIndicator size="large" color="cyan"/>
+        </View>
         :   
-            <FlatList
+        <FlatList
             style={styles.list}
             data={data}
             keyExtractor={x=> x._id}
@@ -50,7 +52,7 @@ const Load =()=>{
                 meal={item.meal_name}
                 /> 
                 }
-            />
+        />
         }
     </View>
     )

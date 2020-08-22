@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {ActivityIndicator, AsyncStorage,View ,StyleSheet} from 'react-native' 
+import {ActivityIndicator, AsyncStorage,Text ,StyleSheet} from 'react-native' 
 
 export default ({navigation})=>{
     useEffect(()=>{
@@ -9,10 +9,15 @@ export default ({navigation})=>{
         })
     },[])
     return (
-        <View>
-            <ActivityIndicator
-            
-            />
-        </View>
+        <>
+        <Text style={styles.Text} >Cargando...</Text>
+        <ActivityIndicator size="large" color="cyan"/>
+        </>
     )
 }
+const styles = StyleSheet.create ({
+    Text:{
+        flex:2,
+        fontSize:30,
+    }
+})
